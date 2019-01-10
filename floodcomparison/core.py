@@ -79,7 +79,7 @@ def floodcomparison(obsf,modf,thresh,outfolder):
         a = TP.sum()
         b = FP.sum()
         c = TN.sum()
-        c = FN.sum()
+        d = FN.sum()
 
         # Calc scores
         H = a/(a+c)
