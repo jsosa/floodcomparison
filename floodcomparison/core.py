@@ -82,10 +82,11 @@ def floodcomparison(obsf,modf,thresh,outfolder):
         d = FN.sum()
 
         # Calc scores
+        # Bias : zero - best, positive - overprediction, negative - underprediction
         H = a/(a+c)
         F = b/(a+b)
         C = a/(a+b+c)
-        B = (a+b)/(a+c)
+        B = (a+b)/(a+c)-1
 
         print('Hit rate: ' + '%3.2f'%H)
         print('False alarm ratio: ' + '%3.2f'%F)
