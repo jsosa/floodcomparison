@@ -38,10 +38,9 @@ def floodcomparison(obsf,modf,thresh,outfolder):
     # Grid extent in both files should have same dimensions
     if (geo1[4]==geo2[4]) & (geo1[5]==geo2[5]):
 
-        # Calc fist intersection/aggrement between obs and mod
-        # Sometimes obs/mod is not available for some tribs,
+        # Calc fist intersection between obs and mod
+        # Sometimes obs or mod is not available for some tribs in both
         # After intersectin is calculated a buffer can be applied
-
         tmp_mod = np.where(mod>thresh,1,0)
         tmp_obs = np.where(obs>0,1,0)
         tmp_buff_msk = np.where((tmp_mod+tmp_obs)==2,1,0)
