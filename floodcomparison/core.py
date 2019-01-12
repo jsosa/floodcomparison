@@ -38,12 +38,22 @@ def floodcomparison(obsf,modf,thresh,outfolder):
     # Grid extent in both files should have same dimensions
     if (geo1[4]==geo2[4]) & (geo1[5]==geo2[5]):
 
+        # Calc fist intersection/aggrement between obs and mod
+        # Sometimes obs/mod is not available for some tribs,
+        # After intersectin is calculated a buffer can be applied
+
+        tmp_mod = np.where(mod>thresh,1,0)
+        tmp_obs = np.where(obs>0,1,0)
+        tmp_buff_msk = np.where((tmp_mod+tmp_obs)==2,1,0)
+        gu.write_raster(tmp_buff_msk,outfolder+'buffer_mask.tif',geo2,'Int16',0)
+
         # Calc proximity around `obsf`
         call(['gdal_proximity.py','-distunits','GEO',
                                   '-co','COMPRESS=LZW',
                                   '-maxdist','0.01',
                                   '-nodata','-9999',
-                                  obsf,outfolder+'buffer_dist.tif'])
+                                  outfolder+'buffer_mask.tif',
+                                  outfolder+'buffer_dist.tif'])
         
         # Save previous as a mask (ones and zeros)
         buff = np.where(gu.get_data(outfolder+'buffer_dist.tif')>=0,1,0)
