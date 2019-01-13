@@ -10,7 +10,7 @@ import numpy as np
 import gdalutils as gu
 from subprocess import call
 
-def floodcomparison(obsf,modf,thresh,outfolder):
+def floodcomparison(obsf,modf,thresh,outfolder,buffer=0.01):
 
     """
     Compare two flood extent masks. Calc Hit rate,
@@ -49,7 +49,7 @@ def floodcomparison(obsf,modf,thresh,outfolder):
         # Calc proximity around `obsf`
         call(['gdal_proximity.py','-distunits','GEO',
                                   '-co','COMPRESS=LZW',
-                                  '-maxdist','0.01',
+                                  '-maxdist',str(buffer),
                                   '-nodata','-9999',
                                   outfolder+'buffer_mask.tif',
                                   outfolder+'buffer_dist.tif'])
