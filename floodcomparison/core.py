@@ -46,7 +46,7 @@ def floodcomparison(obsf,modf,thresh,outfolder,buffer=0.01):
         tmp_buff_msk = np.where((tmp_mod+tmp_obs)==2,1,0)
         gu.write_raster(tmp_buff_msk,outfolder+'buffer_mask.tif',geo2,'Int16',0)
 
-        # Calc proximity around `obsf`
+        # Calc proximity around `buffer_mask`
         call(['gdal_proximity.py','-distunits','GEO',
                                   '-co','COMPRESS=LZW',
                                   '-maxdist',str(buffer),
@@ -60,18 +60,20 @@ def floodcomparison(obsf,modf,thresh,outfolder,buffer=0.01):
         
         # Clip `modf` with the buffer previously calculated
         nmod = np.where(buff==1,mod,0)
+        nobs = np.where(buff==1,obs,0)
 
         # Create a mask of `nmod`
         mask = np.where(nmod>thresh,1,0)
         gu.write_raster(mask,outfolder+'mask.tif',geo2,'Int16',0)
+        gu.write_raster(nobs,outfolder+'obs.tif',geo2,'Int16',0)
 
         # Calculate aggrement between observation and model within the buffer
-        aggr = np.where((obs+mask)==2,1,0)
+        aggr = np.where((nobs+mask)==2,1,0)
         gu.write_raster(aggr,outfolder+'aggr.tif',geo2,'Int16',0)
 
         # Creating mask of wet and dry areas in both observation and
         # model within the buffer
-        obs_wet = obs
+        obs_wet = nobs
         mod_wet = mask
         obs_dry_tmp = np.where(obs_wet==1,0,1)
         mod_dry_tmp = np.where(mod_wet==1,0,1)
