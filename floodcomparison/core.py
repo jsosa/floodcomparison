@@ -99,10 +99,11 @@ def floodcomparison(obsf,modf,thresh,outfolder,buffer=0.01):
         C = a/(a+b+c)
         B = (a+b)/(a+c)-1
 
-        print('Hit rate: ' + '%3.2f'%H)
-        print('False alarm ratio: ' + '%3.2f'%F)
-        print('Critical success index: ' + '%3.2f'%C)
-        print('Bias: ' + '%3.2f'%B)
+        with open(outfolder + 'scores.txt','w') as f:
+            f.write('Hit rate: ' + '%3.2f'%H + '\n')
+            f.write('False alarm ratio: ' + '%3.2f'%F + '\n')
+            f.write('Critical success index: ' + '%3.2f'%C + '\n')
+            f.write('Bias: ' + '%3.2f'%B + '\n')
 
         return H,F,C,B
     
